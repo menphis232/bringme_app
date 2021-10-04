@@ -1,0 +1,23 @@
+div#product-description > p:not(:last-child):last-of-type{
+	display: none;
+}
+
+.round-checkbox{
+	--border-radius: 50%;
+}
+
+ion-button.show-price{
+	--padding-bottom: 16px;
+}
+
+ion-list-header{
+	transition: all 1s;
+}
+
+.no_border {
+	border: 0px !important;
+    border-bottom-color: transparent !important;
+    background-image: none !important;
+    border-bottom: none !important;
+	box-shadow: none !important;
+}

@@ -1,0 +1,33 @@
+<ion-header no-border>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+<ion-back-button></ion-back-button>
+</ion-buttons>
+    <ion-title>
+     {{ text.add_title }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+<form #form="ngForm" (ngSubmit)="saveAddress(form.value)">
+
+
+<ion-item>
+  <ion-label position="floating">{{ text.add_address }}</ion-label>
+  <ion-textarea ngModel name="address" required></ion-textarea>
+</ion-item>
+
+<ion-item>
+  <ion-label position="floating">{{ text.add_landmark }}</ion-label>
+  <ion-input type="text" ngModel name="landmark"></ion-input>
+</ion-item>
+
+
+
+<br><br>
+<ion-button expand="block" mode="ios" type="submit" [disabled]="!form.valid">{{ text.add_button }}</ion-button>
+</form>
+
+</ion-content>

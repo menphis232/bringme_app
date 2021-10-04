@@ -1,0 +1,219 @@
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="end">
+            <ion-icon style="height: 32px; width: 32px; stroke: white; margin-right: 8px" (click)="goToLocation()" class="location-button" slot="end" name="pin" item-right></ion-icon><p *ngIf="quartier_name" style="font-weight: 300">{{ quartier_name }}</p>
+            <ion-menu-button style="height: 32px; width: 32px;margin-right: 8px" no-padding></ion-menu-button>
+        </ion-buttons>
+        <img style="width: 80%; margin: 0 10%; padding: 5% 0;" src="assets/logo.png"/>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content #scrollArea *ngIf="text">
+
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed" *ngIf="count > 0" routerLink="/cart" routerDirection="forward">
+        <ion-fab-button color="primary" edge="true">
+            <ion-icon name="cart"></ion-icon> {{ count }}
+        </ion-fab-button>
+    </ion-fab>
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <div class="title-background" [ngStyle]="{'background-image': 'url(' + 'https://www.bringme.sn/assets/uploads/' + this.category.image + ')'}" style="height: 100px;width:100%;background-color: #20B887; text-align: center; filter: brightness(0.5);">
+        <!--
+        <ion-searchbar (ionInput)="search($event)" placeholder="{{ text.home_search }}" mode="ios" color="light" (ionClear)="ngOnInit()" [(ngModel)]="searchQuery"></ion-searchbar>-->
+        <br>
+        <br>
+        <br>
+    </div>
+    <ion-title class="card-title" style="top: -104px; position: relative; color: white; font-size: 32px; padding: 17px 0; text-align: center;height:80px;"><strong>{{ this.category.name }}</strong></ion-title>
+
+    <ion-card class="welcome-card" style="top: -60px;background-color:white;width: 98%;margin-left: 1%;margin-top: -12%;box-shadow: none !important;" mode="ios">
+
+        <ion-list id="skeleton" *ngIf="!data">
+            <ion-list-header>
+                <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+            </ion-list-header>
+
+            <ion-item *ngFor="let fake of fakeData">
+                <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                </ion-thumbnail>
+                <ion-label>
+                    <h3>
+<ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+</h3>
+                    <p>
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                        <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                </ion-label>
+            </ion-item>
+
+        </ion-list>
+
+        <ion-card-content *ngIf="data" class="card-background-page">
+
+            <h2 *ngIf="hasSearch">Recherche de '{{ hasSearch }}'</h2>
+
+            <ion-card *ngIf="data && data.store.length == 0" mode="ios" style="padding: 20px 20px;">
+
+                <h2>Oups! Aucun résultat <ion-button size="small" mode="ios" (click)="ngOnInit()">Retour</ion-button></h2>
+
+            </ion-card>
+
+            <ion-slides pager="false" [options]="BannerOption" #slideone autoplay="3000" *ngIf="!hasSearch">
+                <ion-slide *ngFor="let offer of data.banner" (click)="bannerLink(offer)"><img src="{{ offer.img }}" width="98%" style="border-radius: 4%"></ion-slide>
+            </ion-slides>
+
+
+            <ion-toolbar style="position: relative;transform: translateX(calc(-50% + 70px));width: 200%;">
+                <ion-row class="filters">
+                    <ion-col no-padding size="12">
+                        <ion-slides (ionSlideDidChange)="slideChanged()" #subcategoriesSlider [options]="SubcategoriesOption">
+                            <ion-slide *ngIf="category.first_category && (category.admin_id || category.marketplace) && data.promos_count" id="slidepromo" (click)="filterData('promo', -1)" [ngClass]="selectedCategory=='promo' ? 'swiper-slide-activ' : ''">
+                                <p>Promotions</p>
+                            </ion-slide>
+                            <ion-slide id="slide{{ category.id }}" (click)="filterData(category.id, i)" *ngFor="let category of subcategories;let i = index" [ngClass]="selectedCategory==category.id ? 'swiper-slide-activ' : ''">
+                                <p>{{ category.name }}</p>
+                            </ion-slide>
+                        </ion-slides>
+                    </ion-col>
+                </ion-row>
+
+            </ion-toolbar>
+
+            <!--
+            <ion-slides pager="false" [options]="SearchOption" #slideone style="margin-left: -10px;margin-top: 5px" *ngIf="!hasSearch">
+
+                <ion-slide (click)="dataFilter(1)">
+                    <ion-card style="padding: 5px 5px" mode="ios"><img src="assets/discount.png" style="width: 40% !important;margin-left: 30%"><small style="font-size: 9px">{{ text.home_offer }}</small></ion-card>
+                </ion-slide>
+
+                <ion-slide (click)="dataFilter(2)">
+                    <ion-card style="padding: 5px 5px" mode="ios"><img src="assets/delivery.png" style="width: 40% !important;margin-left: 30%">
+
+                        <small style="font-size: 9px" *ngIf="filterPress != 2">{{ text.home_fast_delivery }}</small>
+                        <ion-spinner name="dots" *ngIf="filterPress == 2" color="primary"></ion-spinner>
+                    </ion-card>
+                </ion-slide>
+
+                <ion-slide (click)="dataFilter(3)">
+                    <ion-card style="padding: 5px 5px" mode="ios"><img src="assets/trend.png" style="width: 40% !important;margin-left: 30%">
+
+                        <small style="font-size: 9px" *ngIf="filterPress != 3">{{ text.home_trending }}</small>
+                        <ion-spinner name="dots" *ngIf="filterPress == 3" color="primary"></ion-spinner>
+
+                    </ion-card>
+                </ion-slide>
+
+                <ion-slide (click)="dataFilter(4)">
+                    <ion-card style="padding: 5px 5px" mode="ios"><img src="assets/alarm.png" style="width: 40% !important;margin-left: 30%">
+
+                        <small style="font-size: 9px" *ngIf="filterPress != 4">{{ text.home_new_arrival }}</small>
+                        <ion-spinner name="dots" *ngIf="filterPress == 4" color="primary"></ion-spinner>
+
+                    </ion-card>
+                </ion-slide>
+
+                <ion-slide (click)="dataFilter(5)">
+                    <ion-card style="padding: 5px 5px" mode="ios"><img src="assets/rating.png" style="width: 40% !important;margin-left: 30%">
+
+                        <small style="font-size: 9px" *ngIf="filterPress != 5">{{ text.home_by_rating }}</small>
+                        <ion-spinner name="dots" *ngIf="filterPress == 5" color="primary"></ion-spinner>
+
+                    </ion-card>
+                </ion-slide>
+
+            </ion-slides>-->
+
+            <ion-backdrop tappable="false" *ngIf="filterPress"></ion-backdrop>
+    
+            <ion-title style="position:relative;top:0;font-size: 24px; text-align: center;"><strong>{{ selectedCategoryName }}</strong></ion-title>
+
+            <ion-row id="product{{ product.id }}" *ngFor="let product of products;let i = index" (click)="showItem(product, ' FCFA', i)">
+                <ion-row [ngClass]="!product.available ? 'out-of-stock': ''" *ngIf="product.subcategory_id == selectedCategory || product.subcategorybis_id == selectedCategory || product.subcategory2_id == selectedCategory || product.subcategorybis2_id == selectedCategory || (promo && product.promo)">
+                    <ion-col size="4" no-padding><img [defaultImage]="'assets/lazy.gif'" [lazyLoad]="globals.assets_url+product.image" style="filter: brightness(1)"></ion-col>
+                    <ion-col size="8" style="padding: 8px 10px 2px"><b style="line-height:16px;font-size: 16px; color: black; line-height: 1;">{{ product.name }}</b>
+                        <br><!--
+                        <small style="color: gray;font-size: 10px">{{ product.product_details }}</small>
+                        <br>
+                        <small style="color: gray;font-size: 10px">{{ product.price }} FCFA</small>
+                        <br>
+                        <small style="color: red;font-size: 10px" *ngIf="product.promotion">{{ product.promo_price_str }} FCFA</small>-->
+
+                        <p style=" padding-top: 0; line-height: 14px;margin: 0; text-overflow: ellipsis; overflow: hidden;" [innerHTML]="product.details"></p>
+                        <p *ngIf="!product.promo" style="line-height: 18px; font-size: 17px; position: absolute; bottom: 14px; margin: 0; font-weight: 700">{{ product.price_str }} FCFA</p>
+                        <p *ngIf="product.promo" style="line-height: 18px; position: absolute; bottom: 22px; padding-bottom:0;color: red; text-decoration: line-through; font-size: 17px; margin: 0; font-weight: 700">{{ product.price_str }} FCFA</p>
+                        <p *ngIf="product.promo" style="line-height: 18px; position: absolute; bottom: 6px; padding-top:0; font-size: 17px; margin: 0; font-weight: 700">{{ product.promo_price_str }} FCFA</p>
+                        <ion-row>
+                            <ion-item no-padding *ngIf="!product.promo && product.available" lines="none" style="bottom: 0; position: absolute; right: 0; width: 40px;">
+                                <p *ngIf="product.cart_qty > 0" slot="end" style=" font-size: 20px; background-color: #20B887; padding: 8px; border-radius: 8px; color: white; text-align: center;" id="product-quantity-{{ product.id }}">{{ product.cart_qty }}</p>
+                            </ion-item>
+                        </ion-row>
+
+                        <ion-item no-padding *ngIf="product.promo && product.available" lines="none" style="bottom: 0; position: absolute; right: 0; width: 40px;">
+                            <p *ngIf="product.cart_qty > 0" slot="end" style=" font-size: 20px; background-color: #20B887; padding: 8px; border-radius: 8px; color: white; text-align: center;" id="product-quantity-{{ product.id }}">{{ product.cart_qty }}</p>
+                        </ion-item>
+
+                    </ion-col>
+                </ion-row>
+                <h3 *ngIf="!product.available && (product.subcategory_id == selectedCategory || product.subcategorybis_id == selectedCategory || product.subcategory2_id == selectedCategory || product.subcategorybis2_id == selectedCategory || (promo && product.promo))" style="margin-top:80px;position: absolute;left: 50%;transform: translate(-50%, -50%);font-size: 24px;font-weight: 700;color: red;
+                ">RUPTURE</h3>
+            </ion-row>
+
+            <!--
+            <ion-row style="margin-bottom: 10px" *ngFor="let store of data.store;let i = index" (click)="itemPage(store)">
+                <ion-col size="12"><img src="https://www.bringme.sn/assets/uploads/{{ store.image }}" style="border-radius: 10%"><b>{{ store.name }}</b></ion-col>
+                <ion-col size="12" style="padding: 2px 10px"><b>{{ store.name }}</b>
+                    <br>
+                    <small style="color: gray;font-size: 10px">{{ store.type }}</small>
+                    <br>
+                    <small style="color: gray;font-size: 10px">{{ store.currency }}{{ store.person_cost }} {{ text.home_per_person }} | {{ store.delivery_time }} mins</small>
+                    <br>
+                    <small style="color: red;font-size: 10px" *ngIf="store.discount">{{ store.discount }}</small>
+
+                </ion-col>
+                <ion-col size="1">
+                    <ion-badge color="primary">{{ store.rating }}</ion-badge>
+                </ion-col>
+
+                <ion-col size="12" *ngIf="i == 3 && data.trending.length > 0">
+                    <p>Trending in {{ city_name }}</p>
+                    <ion-slides pager="false" [options]="TrendOption" #slideone autoplay="3000" class="trend">
+                        <ion-slide *ngFor="let trend of data.trending" (click)="itemPage(trend)">
+
+                            <ion-card style="padding: 2px 2px;font-size: 12px;width: 100%;margin-left: 2px" mode="ios">
+                                <ion-row>
+                                    <ion-col size="12"><img src="{{ trend.img }}" width="100%"></ion-col>
+                                    <ion-col size="10"><b>{{ trend.title }}</b></ion-col>
+                                    <ion-col size="2">
+                                        <ion-badge color="primary">{{ trend.rating }}</ion-badge>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-card>
+
+                        </ion-slide>
+                    </ion-slides>
+
+                </ion-col>
+
+                <ion-col size="12" *ngIf="i == 8 && data.bottom.length > 0">
+
+                    <ion-slides pager="false" [options]="MiddleBannerOption" #slideone autoplay="1000">
+                        <ion-slide *ngFor="let bottom of data.bottom" (click)="bannerLink(bottom)"><img src="{{ bottom.img }}"></ion-slide>
+                    </ion-slides>
+
+                </ion-col>
+
+            </ion-row>-->
+
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>

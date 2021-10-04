@@ -1,0 +1,65 @@
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>
+            {{ text.profile_title }}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="user">
+    <ion-card mode="ios" class="welcome-card">
+        <ion-card-header>
+            <ion-card-title>{{ text.profile_heading }}</ion-card-title>
+        </ion-card-header>
+        <ion-list lines="none">
+            <ion-list-header>
+                <ion-label>{{ text.profile_welcome }} <b>{{ biller.name }} </b>!</ion-label>
+            </ion-list-header>
+        </ion-list>
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-card style="height: 80px;padding: 10px;" (click)="orders()">
+                      <ion-icon style="left: 50%;position: relative;transform: translateX(-50%);width: 24px;height: 24px;" slot="start" color="medium" name="cart"></ion-icon>
+                      <ion-label style="display:block; text-align: center">Mes commandes en cours</ion-label>
+                    </ion-card>
+                </ion-col>
+                <ion-col>
+                    <ion-card style="height: 80px;padding: 10px;" (click)="ordersHistory()">
+                      <ion-icon style="left: 50%;position: relative;transform: translateX(-50%);width: 24px;height: 24px;" slot="start" color="medium" name="cart"></ion-icon>
+                      <ion-label style="display:block; text-align: center">Mon historique des commandes</ion-label>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-card style="height: 80px;padding: 10px;" (click)="takeAction(1)">
+                      <ion-icon style="left: 50%;position: relative;transform: translateX(-50%);width: 24px;height: 24px;" slot="start" color="medium" name="build"></ion-icon>
+                      <ion-label style="display:block; text-align: center">{{ text.profile_setting }}</ion-label>
+                    </ion-card>
+                </ion-col>
+                <ion-col>
+                    <ion-card style="height: 80px;padding: 10px;" (click)="modalOnLogout()">
+                      <ion-icon style="left: 50%;position: relative;transform: translateX(-50%);width: 24px;height: 24px;" slot="start" color="medium" name="log-out"></ion-icon>
+                      <ion-label style="display:block; text-align: center">{{ text.profile_logout }}</ion-label>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card>
+    <!--Personal Information-->
+    <ion-card mode="ios" *ngIf="action == 1">
+        <ion-item>
+            <ion-button *ngIf="biller.open && biller.open!='0'" (click)="closeStore()" expand="block" mode="ios" style="width: 90%;margin-left: 5%">Fermer la boutique</ion-button>
+            <ion-button *ngIf="!biller.open || biller.open=='0'" (click)="openStore()" expand="block" mode="ios" style="width: 90%;margin-left: 5%">Rouvrir la boutique</ion-button>
+        </ion-item>
+        <!--
+
+<ion-item>
+  <ion-label position="floating">Changer de mot de passe</ion-label>
+  <ion-input type="password" name="password" ngModel></ion-input>
+</ion-item>-->
+    </ion-card>
+</ion-content>

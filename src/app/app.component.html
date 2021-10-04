@@ -1,0 +1,79 @@
+<ion-app dir="{{ dir }}">
+  <ion-split-pane>
+    <ion-menu swipe-gesture="false" type="push" side="end">
+      <ion-header no-border>
+        <ion-toolbar color="primary">
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+      <div style="background-color: #20B887;">
+      <br>
+      <div *ngIf="quartier" style="padding-left: 10px;color: white;"><ion-icon style="height: 32px; width: 32px; stroke: white; margin-right: 8px" class="location-button" slot="end" name="pin" item-right></ion-icon><p style="display: inline-block;position: relative;font-size: 24px;bottom: 6px;">{{ quartier.quartier }}</p></div>
+      <br>
+      </div>
+    
+        <ion-list lines="none">
+        <!--
+       
+        <ion-list-header>
+          {{ text.menu_title }}
+        </ion-list-header>
+
+           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
+            <ion-item [routerDirection]="'forward'" [routerLink]="[p.url]">
+              <ion-icon slot="start" [name]="p.icon"></ion-icon>
+              <ion-label>
+                {{p.title}}
+              </ion-label>
+            </ion-item>
+          </ion-menu-toggle>-->
+
+          <ion-list-header>
+          {{ text.menu_page_title }}
+          </ion-list-header>
+
+          <ion-menu-toggle auto-hide="false">
+          <ion-item routerLink="/about" routerDirection="forward">
+              <ion-icon slot="start" name="arrow-round-forward" ></ion-icon>
+              <ion-label>{{ text.about_title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <!-- <ion-menu-toggle auto-hide="false">
+          <ion-item routerLink="/how" routerDirection="forward">
+              <ion-icon slot="start" name="arrow-round-forward"></ion-icon>
+              <ion-label>{{ text.how_title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle> -->
+
+          <!-- <ion-menu-toggle auto-hide="false">
+          <ion-item routerLink="/faq" routerDirection="forward">
+              <ion-icon slot="start" name="arrow-round-forward"></ion-icon>
+              <ion-label>{{ text.faq_title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle> -->
+
+          <ion-menu-toggle auto-hide="false">
+          <ion-item routerLink="/contact" routerDirection="forward">
+              <ion-icon slot="start" name="arrow-round-forward"></ion-icon>
+              <ion-label>{{ text.contact_title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-menu-toggle auto-hide="false">
+          <ion-item routerLink="/cgv" routerDirection="forward">
+              <ion-icon slot="start" name="arrow-round-forward"></ion-icon>
+              <ion-label>CGV</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+        </ion-list>
+
+      </ion-content>
+      <ion-footer>
+            <ion-item><small style="font-size: 9px;">{{ text.menu_footer }}</small></ion-item>
+            </ion-footer>
+    </ion-menu>
+    <ion-router-outlet main dir="{{ dir }}"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

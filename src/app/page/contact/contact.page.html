@@ -1,0 +1,40 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>
+            {{ text.contact_title }}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+    <form #form="ngForm" (ngSubmit)="send(form.value)">
+    	<h3 style="font-size: 22px;font-weight: 700">Contactez-nous</h3>
+        <ion-item>
+            <ion-label position="floating">
+                <ion-icon name="person"></ion-icon> Nom
+            </ion-label>
+            <ion-input type="text" name="first_name" ngModel required></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">
+                <ion-icon name="mail"></ion-icon> E-mail
+            </ion-label>
+            <ion-input type="email" name="email" ngModel required></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">
+                Message
+            </ion-label>
+            <ion-textarea type="text" name="message" ngModel required></ion-textarea>
+        </ion-item>
+        <br><br>
+        <ion-button expand="block" mode="ios" [disabled]="!form.valid" type="submit">Envoyer</ion-button>
+    </form>
+    <ion-list lines="none">
+        <ion-list-header>
+            <ion-label><ion-icon name="phone"></ion-icon> Par Téléphone : <b>78 116 92 92</b></ion-label>
+        </ion-list-header>
+    </ion-list>
+</ion-content>

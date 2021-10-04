@@ -1,0 +1,43 @@
+ion-row
+{
+	font-size:12px;
+	border-top:1px solid #f7f7f7;
+	padding-top:5px;
+}
+
+.filters {
+
+    ion-col {
+        text-align: center;
+        font-size: 1.1rem;
+        line-height: 1.1rem;
+
+        ion-icon {
+            color: #ccc;
+        }
+
+        &.col-with-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    p {
+        color: #20B887;
+        margin: 0;
+        font-size: 1.1rem;
+        line-height: 1.1rem;
+    }
+
+    .swiper-slide-active p {
+        font-weight: 900;
+        border-bottom: 5px solid #20B887;
+    }
+}
+
+.not-visible{
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+    display: none;
+}

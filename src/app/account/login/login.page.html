@@ -1,0 +1,44 @@
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>
+         {{ text.login_title }}
+        </ion-title>
+
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+<h3 style="font-size: 23px;font-weight: 700">{{ text.login_heading }}</h3><br>
+
+<form #form="ngForm" (ngSubmit)="login(form.value)">
+
+
+<ion-item>
+  <ion-label position="floating"><ion-icon class="label-icon" name="mail"></ion-icon> Email / <ion-icon class="label-icon" name="call"></ion-icon> Téléphone</ion-label>
+  <ion-input type="email" [(ngModel)]="email" required name="email"></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-label position="floating"><ion-icon class="label-icon" name="lock"></ion-icon> Mot de passe</ion-label>
+  <ion-input type="password" [(ngModel)]="password" required name="password"></ion-input>
+</ion-item>
+
+<br>
+<button class="ion-button" expand="block" mode="ios" type="submit">{{ text.login_button }}</button>
+<p align="center">{{ text.login_forgot_password }} <a routerLink="/forgot" routerDirection="forward">{{ text.login_reset_password }}</a></p>
+</form>
+
+<br>
+<ion-button style="background-color: #EB4638; border-radius: 10px;" color="#EB4638" expand="block" mode="ios" (click)="googleLogin()"><ion-icon name="logo-google"></ion-icon>&nbsp;&nbsp;&nbsp;Connexion avec Google</ion-button>
+<ion-button style="background-color: #4862A3; border-radius: 10px;" color="#4862A3" expand="block" mode="ios" (click)="facebookLogin()"><ion-icon name="logo-facebook"></ion-icon>&nbsp;&nbsp;&nbsp;Connexion avec Facebook</ion-button>
+
+<br>
+<ion-button fill="outline" expand="block" mode="ios" routerLink="/signup" routerDirection="forward">{{ text.login_signup }}</ion-button>
+
+
+</ion-content>

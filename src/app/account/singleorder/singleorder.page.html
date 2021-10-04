@@ -1,0 +1,115 @@
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="end"><!-- 
+            <ion-icon style="height: 32px; width: 32px; stroke: white; margin-right: 8px" (click)="goToLocation()" color="white" class="location-button" slot="end" name="location-outline" item-right></ion-icon> -->
+            <ion-menu-button style="height: 32px; width: 32px;margin-right: 8px" no-padding></ion-menu-button>
+        </ion-buttons>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title *ngIf="order">
+            Commande #{{ order.id }}
+        </ion-title>
+
+        <ion-buttons slot="end" *ngIf="data"></ion-buttons>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content mode="ios">
+
+    <div style="width:100%;background-color: #20B887;height: 100px;color:white">
+        &nbsp;
+
+    </div>
+
+    <ion-card mode="ios" style="margin-top: -25%;background-color: white;width: 98%;margin-left: 1%" class="welcome-card">
+
+        <ion-list id="skeleton" *ngIf="!order">
+            <ion-list-header>
+                <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+            </ion-list-header>
+
+            <ion-item *ngFor="let fake of fakeData">
+                <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                </ion-thumbnail>
+                <ion-label>
+                    <h3>
+                        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </h3>
+                    <p>
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                        <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                </ion-label>
+            </ion-item>
+
+        </ion-list>
+
+        <ion-card-content *ngIf="order">
+                <ion-card-header>
+                    <ion-card-subtitle>{{ order.biller }}
+                        <ion-badge color="primary" style="float:right">{{ order.grand_total_str }} FCFA</ion-badge>
+                    </ion-card-subtitle>
+                    <br>
+                    <ion-row class="bottom-line">
+                        <ion-col size="5" class="top-line"><b> {{ text.history_date }}</b></ion-col>
+                        <ion-col size="7" class="top-line">{{ order.date }}</ion-col>
+                        <ion-col *ngIf="order.shipping_date && order.shipping_date!=null && order.shipping_date!='null'" size="5"><b> Livraison différée</b></ion-col>
+                        <ion-col *ngIf="order.shipping_date && order.shipping_date!=null && order.shipping_date!='null'" size="7">{{ order.shipping_date }}</ion-col>
+                        <ion-col size="5" class="top-line"><b> Quartier</b></ion-col>
+                        <ion-col size="7" class="top-line">{{ order.line1 }}</ion-col>
+                        <ion-col size="5" class="top-line"><b> Adresse</b></ion-col>
+                        <ion-col size="7" class="top-line">{{ order.line2 }}</ion-col>
+                    </ion-row>
+                    <ion-row class="bottom-line">
+                        <ion-col size="5"><b> {{ text.history_status }}</b></ion-col>
+                        <ion-col *ngIf="order.sale_status == -1" size="7">Annulée</ion-col>
+                        <ion-col *ngIf="order.sale_status == 0" size="7">En attente de validation</ion-col>
+                        <ion-col *ngIf="order.sale_status == 1" size="7">En cours de préparation</ion-col>
+                        <ion-col *ngIf="order.sale_status == 2" size="7">En attente de livraison</ion-col>
+                        <ion-col *ngIf="order.sale_status == 3" size="7">En livraison</ion-col>
+                        <ion-col *ngIf="order.sale_status == 4" size="7">Terminée</ion-col>
+                    </ion-row>
+                    <ion-row class="bottom-line">
+                        <ion-col size="6"><b> {{ text.history_item }}</b></ion-col>
+                        <ion-col size="3"><b> {{ text.history_qty }}</b></ion-col>
+                        <ion-col size="3"><b> {{ text.history_price }}</b></ion-col>
+                    </ion-row>
+                    <span *ngFor="let item of order.items" class="bottom-line">
+                        <ion-row>
+                            <ion-col size="6" style="padding-bottom: 0;">{{ item.product_name }}</ion-col>
+                            <ion-col size="3" style="padding-bottom: 0;">{{ item.quantity_str }}</ion-col>
+                            <ion-col size="3" style="padding-bottom: 0;">{{ item.total_price_str }}</ion-col>
+                        </ion-row>
+                        <ion-row *ngIf="item.variants_str">
+                            <ion-col size="12" style="padding-top: 0; font-size: 12px;" [innerHTML]="item.variants_str"></ion-col>
+                        </ion-row>
+                    </span>
+                    <ion-row *ngIf="order.total_discount" class="bottom-line">
+                        <ion-col size="9">Réduction<span *ngIf="order.discount_code"> ({{ order.discount_code }})</span></ion-col>
+                        <ion-col size="3">-{{ order.total_discount_str }}</ion-col>
+                    </ion-row>
+                    <ion-row class="bottom-line top-line">
+                        <ion-col size="6"><b>Livraison</b></ion-col>
+                        <ion-col size="3"></ion-col>
+                        <ion-col size="3" *ngIf="order.shipping">{{ order.shipping_str }}</ion-col>
+                        <ion-col size="3" *ngIf="!order.shipping">Gratuit</ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="order.remarques">
+                        <ion-col size="12"><b>Remarques</b></ion-col>
+                        <ion-col size="12">{{ order.remarques }}</ion-col>
+                    </ion-row>
+                    <br>
+                    <ion-button *ngIf="order.sale_status == 0" fill="outline" size="small" style="float: right" (click)="cancelOrder(order.id)">{{ text.history_cancel }}</ion-button>
+                </ion-card-header>
+
+        </ion-card-content>
+
+    </ion-card>
+
+</ion-content>

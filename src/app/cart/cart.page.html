@@ -1,0 +1,135 @@
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="end">
+            <ion-icon style="height: 32px; width: 32px; stroke: white; margin-right: 8px" (click)="goToLocation()" class="location-button" slot="end" name="pin" item-right></ion-icon>
+            <ion-menu-button style="height: 32px; width: 32px;margin-right: 8px" no-padding></ion-menu-button>
+        </ion-buttons>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title>
+            {{ text.cart_heading }}
+        </ion-title>
+
+        <ion-buttons slot="end" *ngIf="data"></ion-buttons>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content mode="ios">
+
+    <div style="width:100%;background-color: #20B887;height: 100px;color:white">
+        &nbsp;
+
+    </div>
+
+    <ion-card mode="ios" style="margin-top: -25%;background-color: white;width: 98%;margin-left: 1%" class="welcome-card">
+
+        <ion-list id="skeleton" *ngIf="!data">
+            <ion-list-header>
+                <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+            </ion-list-header>
+
+            <ion-item *ngFor="let fake of fakeData">
+                <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                </ion-thumbnail>
+                <ion-label>
+                    <h3>
+<ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+</h3>
+                    <p>
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                        <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                </ion-label>
+            </ion-item>
+
+        </ion-list>
+
+        <ion-card-header *ngIf="data">
+            <ion-card-title style="font-size: 25px" *ngIf="data.total == 0">{{ text.cart_empty }}</ion-card-title>
+
+            <img src="https://image.flaticon.com/icons/svg/2038/2038854.svg" style="width: 30%;margin-left: 32%;margin-top: 20%" *ngIf="data.total == 0">
+
+            <ion-button size="small" fill="outline" style="margin-left: 26%;margin-top: 15%" routerLink="/home" routerDirection="root" *ngIf="data.total == 0">{{ text.cart_start_order }}</ion-button>
+
+        </ion-card-header>
+
+        <ion-card-content *ngIf="data">
+
+            <ion-card-header>
+                <div style="padding-left: 10px;color: grey;"><ion-icon style="height: 32px; width: 32px; stroke: grey; margin-right: 8px" color="grey" class="location-button" slot="end" name="pin" item-right></ion-icon><p style="display: inline-block;position: relative;font-size: 24px;bottom: 6px;">{{ data.quartier.quartier }}</p></div>
+            </ion-card-header>
+
+            <div *ngFor="let biller of data.data">
+
+                <ion-row class="border_bottom" *ngFor="let item of biller.products">
+
+                    <ion-col size="3"><img src="https://www.bringme.sn/assets/uploads/{{ item.img }}"></ion-col>
+                    <ion-col size="9" style="padding: 0px 10px"><b>{{ item.qty }} x {{ item.item }}</b>
+
+                        <br>
+                        <p style=" font-size: 12px; margin: 0;" [innerHTML]="item.variants_str"></p>
+                        <p *ngIf="!item.promo" style=" font-size: 18px; margin: 0; font-weight: 700">{{ item.price_str }} FCFA</p>
+                        <p *ngIf="item.promo" style="padding-bottom:0;color: red; text-decoration: line-through; font-size: 18px; margin: 0; font-weight: 700">{{ item.price_str }} FCFA</p>
+                        <p *ngIf="item.promo" style="padding-top:0; font-size: 18px; margin: 0; font-weight: 700">{{ item.promo_price_str }} FCFA</p>
+
+                        <ion-icon name="remove-circle-outline" style="font-size: 26px" color="primary" (click)="addToCart(item,item.price,1,item.note,item.variants)"></ion-icon>
+                        <ion-icon name="add-circle-outline" style="font-size: 26px;margin-left: 15px;margin-top: 10px" color="primary" (click)="addToCart(item,item.price,0,item.note,item.variants)"></ion-icon>
+
+                    </ion-col>
+
+                </ion-row>
+
+            </div>
+
+        </ion-card-content>
+
+    </ion-card>
+
+    <ion-row class="ion-padding fontSize" *ngIf="data && data.total > 0" style="padding-top: 0;">
+        <ion-col size="12" style="padding: 2px 10px">
+            <ion-item>
+              <ion-label position="floating">Remarques : </ion-label>
+              <ion-textarea [(ngModel)]='remarques' name="remarques" placeholder="Exemple : La pizza Reine sans jambon s'il vous plaît"></ion-textarea>
+            </ion-item>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-padding fontSize" *ngIf="data && data.total > 0" style="padding-top: 0;">
+        <ion-col size="8" style="padding: 2px 10px">
+            <ion-item>
+              <ion-label position="floating">Code réduction : </ion-label>
+              <ion-input [(ngModel)]='codePromo' name="codePromo" placeholder=""></ion-input>
+            </ion-item>
+        </ion-col>
+        <ion-col size="4" style="padding: 2px 10px">
+            <ion-button style="bottom: 0; position: absolute;" size="medium" type="button" mode="ios" (click)="applyCodePromo()">Appliquer</ion-button>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-padding fontSize" *ngIf="data && data.total > 0" style="padding-top: 0;">
+
+        <ion-col size="8" class="border_bottom_only" *ngIf="discount > 0">{{ text.cart_discount }} {{ promo.code }}<span *ngIf="promo && promo.type=='reduction'"> ({{ promo.reduction }}%)</span></ion-col>
+        <ion-col size="4" class="border_bottom_only" *ngIf="discount > 0"><strong style="float: right">{{ data.currency }}{{ discount_str }} FCFA</strong></ion-col>
+
+        <ion-col size="8" class="border_bottom_only" *ngIf="data.shipping > 0">{{ text.cart_delivery }}</ion-col>
+        <ion-col size="4" class="border_bottom_only" *ngIf="data.shipping > 0"><strong style="float: right">{{ data.currency }}{{ data.shipping_str }} FCFA</strong></ion-col>
+
+<!-- 
+        <ion-col size="8" class="border_bottom_only" *ngIf="data.discount == 0">{{ text.cart_coupon }}</ion-col>
+        <ion-col size="4" class="border_bottom_only" *ngIf="data.discount == 0"><a (click)="coupen()">{{ text.cart_apply }}</a></ion-col> -->
+
+        <ion-col size="8" class="border_bottom_only">{{ text.cart_payable }}</ion-col>
+        <ion-col size="4" class="border_bottom_only"><strong style="float: right">{{ data.currency }}{{ data.total_str }} FCFA</strong></ion-col>
+    </ion-row>
+
+    <div class="ion-padding" *ngIf="data && data.total > 0" style="padding-top: 0;">
+        <ion-button expand="block" size="large" type="button" mode="ios" (click)="cartSubmit()" routerDirection="forward">{{ text.cart_button }}</ion-button>
+        <br>
+    </div>
+</ion-content>

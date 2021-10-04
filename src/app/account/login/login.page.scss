@@ -1,0 +1,30 @@
+.label-icon{
+	position: relative;
+    top: 3px;
+}
+
+.ion-button{
+	width: 100%;
+	border-radius: 10px;
+    font-size: 18px !important;
+    visibility: inherit;
+    box-sizing: border-box;
+    display: block;
+    background-color: #20B887;
+    color: #ffffff;
+    margin-left: unset;
+    margin-right: unset;
+    margin-inline-start: 2px;
+    margin-inline-end: 2px;
+    --border-radius: 10px;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    --padding-start: 1em;
+    --padding-end: 1em;
+    --transition: background-color,opacity 100ms linear;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    height: 2.8em;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+}

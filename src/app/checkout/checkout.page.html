@@ -1,0 +1,108 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>{{ text.place_title }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="data">
+
+    <ion-card mode="ios">
+
+        <ion-card-header>
+
+            <ion-card-title>{{ data.quartier.quartier }}</ion-card-title>
+
+        </ion-card-header>
+
+        <ion-card-content>
+
+		    <ion-row class="ion-padding fontSize" *ngIf="data && data.total > 0" style="padding-top: 0;"><!-- 
+		        <ion-col size="12" style="padding: 2px 10px">
+		          <ion-item>
+		            <ion-label>Quartier</ion-label>
+		            <ion-select value="{{ quartier }}" [(ngModel)]='quartier' (ionChange)="quartierChanged($event)" placeholder="Quartier">
+		              <ion-select-option value="{{ quartier.id }}" *ngFor="let quartier of data.quartiers">{{ quartier.quartier }}</ion-select-option>
+		            </ion-select>
+		          </ion-item>
+		        </ion-col> -->
+		        <ion-col size="12" style="padding: 2px 10px">
+		            <ion-item>
+		              <ion-label position="floating">Indications (requis) : </ion-label>
+		              <ion-textarea [(ngModel)]='indications' name="indications" required></ion-textarea>
+		            </ion-item>
+		        </ion-col>
+                <ion-button expand="block" mode="ios" type="submit" [disabled]="!indications" (click)="saveAddress()" style="width: 90%;margin-left: 5%">Définir comme adresse principale</ion-button>
+                <ion-col size="12" style="padding: 2px 10px">
+                    <ion-item>
+                      <ion-label position="floating">Téléphone : </ion-label>
+                      <ion-input [(ngModel)]='user.phone' name="phone" placeholder=""></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col *ngIf="!data.marketplace" size="12" style="padding: 24px 10px 0">
+                    <ion-label position="floating" style="color: black;">Quand souhaitez-vous être livré?</ion-label>
+                    <ion-select placeholder="Selectionnez" [(ngModel)]="isDelayed">
+                        <ion-select-option [value]="0">Dès que possible</ion-select-option>
+                        <ion-select-option [value]="1">Plus tard (choisir)</ion-select-option>
+                    </ion-select>
+                </ion-col>
+                <ion-col *ngIf="!data.marketplace && isDelayed" size="12" style="padding: 0px 10px">
+                    <ion-item>
+                        <ion-label position="floating">Date</ion-label>
+                        <ion-datetime [(ngModel)]="shippingDay" [value]="data.ion_picker_values.days[0]" [min]="data.ion_picker_values.days[0]" [max]="data.ion_picker_values.days[6]" (ionChange)="dateChanged()" [doneText]="'Valider'" [cancelText]="'Annuler'" displayFormat="DD/MM"></ion-datetime>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="floating">Heure</ion-label>
+                        <ion-datetime [(ngModel)]="shippingHour" [(hourValues)]="hoursValues" minuteValues="0,30" displayFormat="H:mm" [doneText]="'Valider'" [cancelText]="'Annuler'"></ion-datetime>
+                    </ion-item>
+                </ion-col>
+		    </ion-row>
+
+        </ion-card-content>
+
+    </ion-card><!-- 
+
+    <ion-card mode="ios">
+
+        <ion-card-header>
+
+            <ion-card-title>{{ text.place_payment_heading }}</ion-card-title>
+
+        </ion-card-header>
+
+        <ion-card-content>
+
+            <ion-item style="font-size: 13px">
+                <ion-label><img src="https://image.flaticon.com/icons/svg/760/760503.svg" style="width:30px"> Paiement à la livraison</ion-label>
+                <ion-radio slot="start" value="1" (ionSelect)="setPayment(1)" [checked]="payment == 1"></ion-radio>
+            </ion-item>
+
+            <ion-item style="font-size: 13px" *ngIf="paypal_id">
+                <ion-label><img src="assets/paypal.png" style="width: 90px"> <span style="margin-top: -40px">Pay Via Paypal</span></ion-label>
+                <ion-radio slot="start" value="2" (ionSelect)="setPayment(2)" [checked]="payment == 2"></ion-radio>
+            </ion-item>
+
+        </ion-card-content>
+
+    </ion-card> -->
+    <ion-row class="ion-padding fontSize" *ngIf="data && data.total > 0 && data.shipping_time_str && data.shipping_time_str!=''" style="padding-top: 0;">
+        <ion-col size="7" class="border_bottom_only">Durée de livraison estimée :</ion-col>
+        <ion-col size="5" class="border_bottom_only"><strong style="float: right">{{ data.shipping_time_str }}</strong></ion-col>
+    </ion-row>
+    <ion-row class="ion-padding fontSize" *ngIf="data && data.total > 0" style="padding-top: 0;">
+        <ion-col size="8" class="border_bottom_only">{{ text.cart_payable }}</ion-col>
+        <ion-col size="4" class="border_bottom_only"><strong style="float: right">{{ data.currency }}{{ data.total_str }} FCFA</strong></ion-col>
+    </ion-row>
+
+    <div class="ion-padding" style="padding-top: 0;">
+
+        <ion-button expand="block" mode="ios" type="button" [disabled]="!quartier || isDisabled || (isDelayed && (!shippingDay || !shippingHour))" (click)="makeOrder()">{{ text.place_order_button }}</ion-button>
+
+    </div>
+
+    <br>
+    <br>
+
+</ion-content>

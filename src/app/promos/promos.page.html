@@ -1,0 +1,101 @@
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="end">
+            <ion-icon style="height: 32px; width: 32px; stroke: white; margin-right: 8px" (click)="goToLocation()" class="location-button" slot="end" name="pin" item-right></ion-icon><p *ngIf="quartier_name" style="position: absolute;width: 90px;left: -21px;top: 16px;text-align: center; padding:0; margin: 16px 0;font-weight: 300">{{ quartier_name }}</p>
+            <ion-menu-button style="height: 32px; width: 32px;margin-right: 8px" no-padding></ion-menu-button>
+        </ion-buttons>
+        <img style="width: 50%; margin: 0 25%; padding: 5% 0;" src="assets/logo.png"/>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content #scrollArea *ngIf="text">
+
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed" *ngIf="count > 0" routerLink="/cart" routerDirection="forward">
+        <ion-fab-button color="primary" edge="true">
+            <ion-icon name="cart"></ion-icon> {{ count }}
+        </ion-fab-button>
+    </ion-fab>
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <div class="title-background" style="height: 100px;width:100%;background-color: #20B887; text-align: center; filter: brightness(0.5);">
+        <!--
+        <ion-searchbar (ionInput)="search($event)" placeholder="{{ text.home_search }}" mode="ios" color="light" (ionClear)="ngOnInit()" [(ngModel)]="searchQuery"></ion-searchbar>-->
+        <br>
+        <br>
+        <br>
+    </div>
+    <ion-title class="card-title" style="top: -104px; position: relative; color: white; font-size: 32px; padding: 17px 0; text-align: center;"><strong>Promotions</strong></ion-title>
+
+    <ion-card class="welcome-card" style="top: -60px;background-color:white;width: 98%;margin-left: 1%;margin-top: -12%;box-shadow: none !important;" mode="ios">
+
+        <ion-list id="skeleton" *ngIf="!data">
+            <ion-list-header>
+                <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+            </ion-list-header>
+
+            <ion-item *ngFor="let fake of fakeData">
+                <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                </ion-thumbnail>
+                <ion-label>
+                    <h3>
+<ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+</h3>
+                    <p>
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                        <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                </ion-label>
+            </ion-item>
+
+        </ion-list>
+
+        <ion-card-content *ngIf="data" class="card-background-page">
+
+            <h2 *ngIf="hasSearch">Recherche de '{{ hasSearch }}'</h2>
+
+            <ion-card *ngIf="data && !products" mode="ios" style="padding: 20px 20px;">
+
+                <h2>Oups! Aucun résultat <ion-button size="small" mode="ios" (click)="ngOnInit()">Retour</ion-button></h2>
+
+            </ion-card>
+
+            <ion-backdrop tappable="false" *ngIf="filterPress"></ion-backdrop>
+
+            <ion-row id="product{{ product.id }}" *ngFor="let product of products;let i = index" (click)="showItem(product, ' FCFA', i)">
+                <ion-row [ngClass]="!product.available ? 'out-of-stock': ''">
+                    <ion-col size="4" no-padding><img [defaultImage]="'assets/lazy.gif'" [lazyLoad]="globals.assets_url+product.image" style="filter: brightness(1)"></ion-col>
+                    <ion-col size="8" style="padding: 2px 10px"><b style="font-size: 20px; color: black;">{{ product.name }}</b>
+                        <br>
+
+                        <p style=" padding-top: 0; line-height: 14px;margin: 0; text-overflow: ellipsis; overflow: hidden;" [innerHTML]="product.details"></p>
+                        <p *ngIf="!product.promo" style="line-height: 18px; font-size: 17px; position: absolute; bottom: 14px; margin: 0; font-weight: 700">{{ product.price_str }} FCFA</p>
+                        <p *ngIf="product.promo" style="line-height: 18px; position: absolute; bottom: 22px; padding-bottom:0;color: red; text-decoration: line-through; font-size: 17px; margin: 0; font-weight: 700">{{ product.price_str }} FCFA</p>
+                        <p *ngIf="product.promo" style="line-height: 18px; position: absolute; bottom: 6px; padding-top:0; font-size: 17px; margin: 0; font-weight: 700">{{ product.promo_price_str }} FCFA</p>
+                        <ion-row>
+                            <ion-item no-padding *ngIf="!product.promo && product.available" lines="none" style="bottom: 0; position: absolute; right: 0; width: 40px;">
+                                <p *ngIf="product.cart_qty > 0" slot="end" style=" font-size: 20px; background-color: #20B887; padding: 8px; border-radius: 8px; color: white; text-align: center;" id="product-quantity-{{ product.id }}">{{ product.cart_qty }}</p>
+                            </ion-item>
+                        </ion-row>
+
+                        <ion-item no-padding *ngIf="product.promo && product.available" lines="none" style="bottom: 0; position: absolute; right: 0; width: 40px;">
+                            <p *ngIf="product.cart_qty > 0" slot="end" style=" font-size: 20px; background-color: #20B887; padding: 8px; border-radius: 8px; color: white; text-align: center;" id="product-quantity-{{ product.id }}">{{ product.cart_qty }}</p>
+                        </ion-item>
+
+                    </ion-col>
+                </ion-row>
+                <h3 *ngIf="!product.available" style="margin-top:80px;position: absolute;left: 50%;transform: translate(-50%, -50%);font-size: 24px;font-weight: 700;color: red;
+                ">RUPTURE</h3>
+            </ion-row>
+
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>

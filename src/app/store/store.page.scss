@@ -1,0 +1,115 @@
+.filters {
+
+    ion-col {
+        text-align: center;
+        font-size: 1.1rem;
+        line-height: 1.1rem;
+
+        ion-icon {
+            color: #ccc;
+        }
+
+        &.col-with-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    p {
+        color: #20B887;
+        margin: 0;
+        font-size: 1.1rem;
+        line-height: 1.1rem;
+        border-bottom: 5px solid #ffffff;
+    }
+
+    .swiper-slide-activ p {
+        font-weight: 900;
+        letter-spacing: -0.08rem;
+        border-bottom: 5px solid #20B887;
+    }
+}
+
+.welcome-card img {
+  max-height: 35vh;
+  overflow: hidden;
+  filter: brightness(0.4);
+}
+
+.out-of-stock{
+  opacity: 0.5
+}
+
+.cart-button{
+  color: #20B887;
+  margin: 0;
+  height: 100%;
+  width: 1.4em;
+}
+
+.card-content-md {
+  line-height: 1 !important;
+}
+
+p {
+  line-height: 14px !important;
+}
+
+ion-row > ion-row{
+  box-shadow: 1px 2px 10px 0px grey;
+  border-radius: 10px;
+  margin-top: 20px;
+  overflow: hidden;
+  width: 100%;
+}
+
+p
+{
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+
+.trend
+{
+	margin-top:-25px;
+}
+ion-backdrop {
+      opacity: 0.3;
+    }
+
+    .card-background-page {
+
+  ion-card {
+    position: relative;
+    text-align: center;
+    border-radius: 20px;
+    -webkit-margin-start: 30px;
+    margin-inline-start: 30px;
+    -webkit-margin-end: 30px;
+    margin-inline-end: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    position: absolute;
+    top: 18%;
+    font-size: 2.0em;
+    width: 100%;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .card-subtitle {
+    font-size: 1.0em;
+    position: absolute;
+    top: 52%;
+    width: 100%;
+    color: #fff;
+  }
+
+}

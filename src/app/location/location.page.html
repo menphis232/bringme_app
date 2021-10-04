@@ -1,0 +1,28 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title *ngIf="text">{{ text.city_title }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content class="ion-no-padding">
+    <!--<ion-searchbar (ionInput)="search($event)" mode="ios" color="light" placeholder="{{ text.city_search }}"></ion-searchbar>-->
+    <div #map_canvas id="map_canvas"></div>
+    <img src="assets/marker.png" style="position:absolute;left:calc( 50% - 16px );bottom:62.5%;width:32px;height:32px" />
+    <span style="position:absolute;left:24px;top:24px;text-align: center;background-color: #F7F7F7;"><img (click)="locateMe()" src="assets/locate_me.png" style="width:64px;height:64px"><p style="padding: 0 4px 8px;margin: 0;">Me localiser</p></span>
+    <ion-list>
+        <ion-radio-group>
+            <ion-list-header>
+                <ion-label>{{ text.city_heading }}</ion-label>
+            </ion-list-header>
+            <ion-item>
+                <ion-label>Quartier : </ion-label>
+                <ion-select *ngIf="quartierVisible" placeholder="Selectionnez" [(ngModel)]="quartier" (ionChange)="quartierChanged()">
+                    <ion-select-option *ngFor="let quartier of data" [value]="quartier.id">{{ quartier.quartier }}</ion-select-option>
+                </ion-select>
+            </ion-item>
+        </ion-radio-group>
+    </ion-list>
+    <ion-button expand="block" size="large" type="button" [disabled]="!quartier" (click)="quartierSubmit()" mode="ios">{{ text.city_button }}</ion-button>
+</ion-content>

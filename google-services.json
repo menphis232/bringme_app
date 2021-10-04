@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "665736070770",
+    "firebase_url": "https://bringme-250019.firebaseio.com",
+    "project_id": "bringme-250019",
+    "storage_bucket": "bringme-250019.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665736070770:android:5c071f3275b920670924eb",
+        "android_client_info": {
+          "package_name": "com.angularfirebase.bringme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "665736070770-2gr9ouquf0fcnim7r3oigqt337a2bfvv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.angularfirebase.bringme",
+            "certificate_hash": "f7a0de99f854e319a2794187b602b5ea27f9f417"
+          }
+        },
+        {
+          "client_id": "665736070770-klavbhek3q6isc99us9nbcgccma7dogi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaEkY50hRcMav0oZMn3mUDsnvWLUFcsGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "665736070770-klavbhek3q6isc99us9nbcgccma7dogi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "665736070770-9hbcfrlqq6s3beoi0sv20jh9l8023mha.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.angularfirebase.bringme"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

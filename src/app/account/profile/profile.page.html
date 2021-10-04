@@ -1,0 +1,129 @@
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>
+            {{ text.profile_title }}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="user">
+    <ion-card mode="ios" class="welcome-card">
+        <ion-card-header>
+            <ion-card-title>{{ text.profile_heading }}</ion-card-title>
+        </ion-card-header>
+        <ion-list lines="none">
+            <ion-list-header>
+                <ion-label>{{ text.profile_welcome }} <b>{{ user.first_name }} </b>!</ion-label>
+            </ion-list-header>
+            <ion-list-header>
+                <ion-label>Email : <b>{{ user.email }}</b></ion-label>
+            </ion-list-header>
+            <ion-list-header>
+                <ion-label>Nombre de commandes passées : <b>{{ user.orders_count }}</b></ion-label>
+            </ion-list-header>
+            <ion-item routerLink="/order" routerDirection="forward">
+                <ion-icon slot="start" color="medium" name="cart"></ion-icon>
+                <ion-label>{{ text.profile_order_history }}</ion-label>
+            </ion-item>
+            <ion-item (click)="takeAction(1)">
+                <ion-icon slot="start" color="medium" name="build"></ion-icon>
+                <ion-label>{{ text.profile_setting }}</ion-label>
+            </ion-item>
+            <ion-item (click)="takeAction(2)">
+                <ion-icon slot="start" color="medium" name="build"></ion-icon>
+                <ion-label>Adresse</ion-label>
+            </ion-item>
+            <ion-item (click)="modalOnLogout()">
+                <ion-icon slot="start" color="medium" name="log-out"></ion-icon>
+                <ion-label>{{ text.profile_logout }}</ion-label>
+            </ion-item>
+        </ion-list>
+    </ion-card>
+    <!--Personal Information-->
+    <ion-card mode="ios" *ngIf="action == 1">
+        <form #form="ngForm" (ngSubmit)="update(form.value)">
+            <ion-card-header>
+                <ion-card-subtitle>Mise à jour des paramètres de compte</ion-card-subtitle>
+            </ion-card-header>
+            <ion-item>
+                <ion-label position="floating">Prénom</ion-label>
+                <ion-input type="text" name="first_name" [(ngModel)]="user.first_name" required></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Nom</ion-label>
+                <ion-input type="text" name="last_name" [(ngModel)]="user.last_name" required></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Téléphone</ion-label>
+                <ion-input type="tel" name="phone" [(ngModel)]="user.phone" required></ion-input>
+            </ion-item>
+            <!--
+
+<ion-item>
+  <ion-label position="floating">Changer de mot de passe</ion-label>
+  <ion-input type="password" name="password" ngModel></ion-input>
+</ion-item>-->
+            <br>
+            <ion-button expand="block" mode="ios" type="submit" [disabled]="!form" style="width: 90%;margin-left: 5%">Sauvegarder</ion-button>
+        </form>
+    </ion-card>
+    <ion-card mode="ios" *ngIf="action == 2">
+        <form #forma="ngForm" (ngSubmit)="updateA(forma.value)">
+            <ion-card-header>
+                <ion-card-subtitle>Mise à jour de l'adresse principale</ion-card-subtitle>
+            </ion-card-header>
+            <ion-item>
+                <ion-label position="floating">Quartier</ion-label>
+                <ion-select placeholder="Selectionnez" [(ngModel)]="address.quartier_details.id" name="quartier" (ionChange)="consoleQuartier()">
+                    <ion-select-option *ngFor="let quartier of quartiers" [value]="quartier.id">{{ quartier.quartier }}</ion-select-option>
+                </ion-select>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Indications</ion-label>
+                <ion-input type="text" name="indications" [(ngModel)]="address.line2" required></ion-input>
+            </ion-item>
+            <!--
+
+<ion-item>
+  <ion-label position="floating">Changer de mot de passe</ion-label>
+  <ion-input type="password" name="password" ngModel></ion-input>
+</ion-item>-->
+            <br>
+            <ion-button expand="block" mode="ios" type="submit" [disabled]="!forma" style="width: 90%;margin-left: 5%">Sauvegarder</ion-button>
+        </form>
+    </ion-card>
+</ion-content>
+
+
+<ion-footer *ngIf="text">
+    <ion-toolbar mode="ios">
+
+        <ion-tabs>
+            <ion-tab-bar slot="bottom" style="padding: 0">
+
+                <ion-tab-button (click)="navigateRoot('home')">
+                    <ion-icon name="home"></ion-icon>
+                    <ion-label>{{ text.home_footer_name }}</ion-label>
+                </ion-tab-button>
+
+                <!--<ion-tab-button tab="map" (click)="nearBy()">
+                    <ion-icon name="pin"></ion-icon>
+                    <ion-label>{{ text.home_nearest }}</ion-label>
+                </ion-tab-button>-->
+
+                <ion-tab-button (click)="navigateForward('blog')">
+                    <ion-icon name="paper"></ion-icon>
+                    <ion-label>{{ text.home_blog }}</ion-label>
+                </ion-tab-button>
+
+                <ion-tab-button (click)="ngOnInit()">
+                    <ion-icon name="person"></ion-icon>
+                    <ion-label>{{ text.home_profile }}</ion-label>
+                </ion-tab-button>
+            </ion-tab-bar>
+        </ion-tabs>
+
+    </ion-toolbar>
+</ion-footer>

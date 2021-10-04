@@ -1,0 +1,110 @@
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="end">
+            <ion-menu-button style="height: 32px; width: 32px;margin-right: 8px" no-padding></ion-menu-button>
+        </ion-buttons>
+        <img style="width: 50%; margin: 0 25%; padding: 5% 0;" src="assets/logo.png"/>
+		<ion-buttons slot="start">
+			<ion-back-button></ion-back-button>
+		</ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="text">
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <div style="width:100%;background-color: #20B887; text-align: center">
+        <br>
+        <ion-title class="card-title" style="color: white; font-size: 32px; max-height: 80px;position:relative;padding:0;"><strong>Nouveautés</strong></ion-title>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+
+    <ion-card class="welcome-card" style="background-color:white;width: 98%;margin-left: 1%;margin-top: -12%;box-shadow: none !important;" mode="ios">
+
+        <ion-list id="skeleton" *ngIf="!data">
+            <ion-list-header>
+                <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+            </ion-list-header>
+
+            <ion-item *ngFor="let fake of fakeData">
+                <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                </ion-thumbnail>
+                <ion-label>
+                    <h3>
+<ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+</h3>
+                    <p>
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                        <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                </ion-label>
+            </ion-item>
+
+        </ion-list>
+
+        <ion-card-content *ngIf="data" class="card-background-page">
+
+            <ion-card *ngIf="data && data.articles.length == 0" mode="ios" style="padding: 20px 20px;">
+
+                <h2>Oups! Aucun article... <ion-button size="small" mode="ios" (click)="ngOnInit()">Retour</ion-button></h2>
+
+            </ion-card>
+
+            <h2 *ngIf="data && data.articles.length > 0">Retrouve toute notre actualité ici !</h2>
+
+            <div *ngFor="let article of data.articles;let i = index" (click)="articlePage(article)">
+                <ion-card>
+                  <img src="https://www.bringme.sn/assets/uploads/{{ article.image }}" />
+                  <ion-card-header style="padding: 12px;">
+                    <ion-card-title class="text-left" [innerHTML]="article.title"></ion-card-title>
+                    <ion-card-subtitle class="text-left">{{ article.date }}</ion-card-subtitle>
+                  </ion-card-header>
+                  <ion-card-content>
+                  </ion-card-content>
+                </ion-card>
+            </div>
+
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>
+
+
+<ion-footer *ngIf="text">
+    <ion-toolbar mode="ios">
+
+        <ion-tabs>
+            <ion-tab-bar slot="bottom" style="padding: 0">
+
+                <ion-tab-button (click)="navigateRoot('home')">
+                    <ion-icon name="home"></ion-icon>
+                    <ion-label>{{ text.home_footer_name }}</ion-label>
+                </ion-tab-button>
+
+                <!--<ion-tab-button tab="map" (click)="nearBy()">
+                    <ion-icon name="pin"></ion-icon>
+                    <ion-label>{{ text.home_nearest }}</ion-label>
+                </ion-tab-button>-->
+
+                <ion-tab-button (click)="ngOnInit()">
+                    <ion-icon name="paper"></ion-icon>
+                    <ion-label>{{ text.home_blog }}</ion-label>
+                </ion-tab-button>
+
+                <ion-tab-button (click)="profileClick()">
+                    <ion-icon name="person"></ion-icon>
+                    <ion-label>{{ text.home_profile }}</ion-label>
+                </ion-tab-button>
+            </ion-tab-bar>
+        </ion-tabs>
+
+    </ion-toolbar>
+</ion-footer>

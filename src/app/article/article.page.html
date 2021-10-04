@@ -1,0 +1,67 @@
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="end"><!-- 
+            <ion-icon style="height: 32px; width: 32px; stroke: white; margin-right: 8px" (click)="goToLocation()" color="white" class="location-button" slot="end" name="location-outline" item-right></ion-icon>
+ -->            <ion-menu-button style="height: 32px; width: 32px;margin-right: 8px" no-padding></ion-menu-button>
+        </ion-buttons>
+        <img style="width: 50%; margin: 0 25%; padding: 5% 0;" src="assets/logo.png"/>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content #scrollArea *ngIf="text && data">
+<!-- 
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed" *ngIf="count > 0" routerLink="/cart" routerDirection="forward">
+        <ion-fab-button color="primary" edge="true">
+            <ion-icon name="cart"></ion-icon> {{ count }}
+        </ion-fab-button>
+    </ion-fab> -->
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <div *ngIf="data.article" class="title-background" [ngStyle]="{'background-image': 'url(' + 'https://www.bringme.sn/assets/uploads/' + data.article.image + ')'}" style="height: 100px;width:100%;background-color: #20B887; text-align: center; filter: brightness(0.5); background-size: cover;">
+        <!--
+        <ion-searchbar (ionInput)="search($event)" placeholder="{{ text.home_search }}" mode="ios" color="light" (ionClear)="ngOnInit()" [(ngModel)]="searchQuery"></ion-searchbar>-->
+        <br>
+        <br>
+        <br>
+    </div>
+    <ion-title class="card-title" style="top: -104px; position: relative; color: white; font-size: 32px; padding: 17px 0; text-align: center; max-height: 20px;"><strong></strong></ion-title>
+
+    <ion-card class="welcome-card" style="top: -60px;background-color:white;width: 98%;margin-left: 1%;margin-top: -12%;box-shadow: none !important;" mode="ios">
+
+        <ion-list id="skeleton" *ngIf="!data">
+            <ion-list-header>
+                <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+            </ion-list-header>
+
+            <ion-item *ngFor="let fake of fakeData">
+                <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                </ion-thumbnail>
+                <ion-label>
+                    <h3>
+<ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+</h3>
+                    <p>
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                        <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                </ion-label>
+            </ion-item>
+
+        </ion-list>
+
+        <ion-card-content *ngIf="data" class="card-background-page">
+            <h1><strong [innerHTML]="sanitizer.bypassSecurityTrustHtml(data.article.title)"></strong></h1>
+            
+            <div [innerHTML]="sanitizer.bypassSecurityTrustHtml(data.article.body)"></div>
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>

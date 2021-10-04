@@ -1,0 +1,7 @@
+{
+    "/api/*": {
+        "target": "https://indilma.sn",
+        "secure": false,
+        "logLevel": "debug"
+    }
+}

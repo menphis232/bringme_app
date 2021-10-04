@@ -1,0 +1,103 @@
+<ion-header no-border>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+            <!-- <ion-icon style="height: 32px; width: 32px; stroke: white; margin-left: 8px" (click)="goToHome()" color="white" class="location-button" slot="end" name="home" item-right></ion-icon> -->
+            <ion-icon *ngIf="after_order" style="height: 32px; width: 32px; stroke: white; margin-left: 8px" (click)="goToHome()" class="location-button" slot="end" name="home" item-right></ion-icon>
+        </ion-buttons>
+        <ion-title>
+            {{ text.history_title }}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="data">
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-card class="welcome-card" *ngFor="let order of data" mode="ios" (click)="orderDetail(order.id)">
+
+        <ion-card-header>
+
+            <ion-card-subtitle>{{ order.biller }} (#{{order.id}})
+                <ion-badge color="primary" style="float:right">{{ order.grand_total_str }} FCFA</ion-badge>
+            </ion-card-subtitle>
+
+            <br>
+            <ion-row>
+
+                <ion-col size="5"><b> {{ text.history_date }}</b></ion-col>
+                <ion-col size="7">{{ order.date }}</ion-col>
+
+            </ion-row>
+
+            <ion-row>
+
+                <ion-col size="5"><b> {{ text.history_status }}</b></ion-col>
+                <ion-col *ngIf="order.sale_status == -1" size="7">Annulée</ion-col>
+                <ion-col *ngIf="order.sale_status == 0" size="7">En attente de validation</ion-col>
+                <ion-col *ngIf="order.sale_status == 1" size="7">En cours de préparation</ion-col>
+                <ion-col *ngIf="order.sale_status == 2" size="7">En attente de livraison</ion-col>
+                <ion-col *ngIf="order.sale_status == 3" size="7">En livraison</ion-col>
+                <ion-col *ngIf="order.sale_status == 4 || order.sale_status == 'completed'" size="7">Terminée</ion-col>
+
+            </ion-row>
+            <ion-row *ngIf="order.shipping_date && order.shipping_date!=null && order.shipping_date!='null'">
+                <ion-col size="5"><b> Livraison différée</b></ion-col>
+                <ion-col size="7"> {{ order.shipping_date }}</ion-col>
+            </ion-row>
+<!-- 
+            <ion-row>
+
+                <ion-col size="6"><b> {{ text.history_item }}</b></ion-col>
+                <ion-col size="3"><b> {{ text.history_qty }}</b></ion-col>
+                <ion-col size="3"><b> {{ text.history_price }}</b></ion-col>
+
+            </ion-row>
+
+            <span *ngFor="let item of order.items">
+<ion-row>
+
+<ion-col size="6">{{ item.product_name }}</ion-col>
+<ion-col size="3">{{ item.quantity_str }}</ion-col>
+<ion-col size="3">{{ item.total_price_str }}</ion-col>
+</ion-row>
+
+<ion-row *ngFor="let addon of item.addon">
+
+<ion-col size="6">{{ addon.addon }}</ion-col>
+<ion-col size="3">{{ item.qty }}</ion-col>
+<ion-col size="3">{{ order.currency }}{{ item.price  }}</ion-col>
+
+</ion-row>
+</span>
+            <ion-row>
+
+                <ion-col size="6">Livraison</ion-col>
+                <ion-col size="3"></ion-col>
+                <ion-col size="3" *ngIf="order.shipping">{{ order.shipping_str }}</ion-col>
+                <ion-col size="3" *ngIf="!order.shipping">Gratuit</ion-col>
+            </ion-row> -->
+
+            <br>
+            <!-- <ion-button *ngIf="order.has_rating == 0" fill="outline" size="small" color="success" routerLink="/rate/{{ order.id }}" routerDirection="forward">{{ text.history_rating }}</ion-button> -->
+            <ion-button *ngIf="order.sale_status == 0" fill="outline" size="small" style="float: right" (click)="$event.stopPropagation();cancelOrder(order.id)">{{ text.history_cancel }}</ion-button>
+
+        </ion-card-header>
+
+    </ion-card>
+
+</ion-content>
+
+<ion-content *ngIf="!data">
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-card class="welcome-card" *ngFor="let order of data" mode="ios">
+    	Vous n'avez passé aucune commande pour le moment...
+    </ion-card>
+</ion-content>
