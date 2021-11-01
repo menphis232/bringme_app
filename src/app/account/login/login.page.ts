@@ -10,6 +10,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
+import { SignInWithApple, AppleSignInResponse, AppleSignInErrorResponse, ASAuthorizationAppleIDRequest } from '@ionic-native/sign-in-with-apple/ngx';
+
 
 @Component({
   selector: 'app-login',
@@ -26,7 +28,7 @@ export class LoginPage implements OnInit {
   loading:any;
   canBack = 1;
   
-  constructor(public events: Events,private http: HttpClient,private platform: Platform,private google: GooglePlus,private fb: Facebook,private fireAuth: AngularFireAuth,private route: ActivatedRoute,public server : ServerService,public toastController: ToastController,private nav: NavController,public loadingController: LoadingController){
+  constructor(public events: Events,private http: HttpClient,private platform: Platform,private google: GooglePlus,private fb: Facebook,private fireAuth: AngularFireAuth,private route: ActivatedRoute,public server : ServerService,public toastController: ToastController,private nav: NavController,public loadingController: LoadingController,private signInWithApple: SignInWithApple){
 
   this.text = JSON.parse(localStorage.getItem('app_text'));
 
@@ -194,4 +196,22 @@ export class LoginPage implements OnInit {
       }
     });
   } 
+
+  loginApple(){
+    this.signInWithApple.signin({
+      requestedScopes: [
+        ASAuthorizationAppleIDRequest.ASAuthorizationScopeFullName,
+        ASAuthorizationAppleIDRequest.ASAuthorizationScopeEmail
+      ]
+    })
+    .then((res: AppleSignInResponse) => {
+      // https://developer.apple.com/documentation/signinwithapplerestapi/verifying_a_user
+      alert('Send token to apple for verification: ' + res.identityToken);
+      console.log(res);
+    })
+    .catch((error: AppleSignInErrorResponse) => {
+      alert(error.code + ' ' + error.localizedDescription);
+      console.error(error);
+    });
+  }
 }
